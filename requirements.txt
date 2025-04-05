@@ -1,5 +1,6 @@
 tensorflow==2.19.0
-flask==2.2.2
+flask==2.2.5
 joblib
 numpy
 gunicorn
+werkzeug==2.2.3
