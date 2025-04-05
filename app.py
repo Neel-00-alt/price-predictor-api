@@ -15,6 +15,11 @@ EXPECTED_KEYS = [
     "Weather Condition", "Demand Level", "Supply Level"
 ]
 
+# ✅ Root route to confirm service is live
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({"message": "Price Predictor API is up and running 🚀"})
+
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
