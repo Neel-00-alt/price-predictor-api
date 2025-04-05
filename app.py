@@ -1,6 +1,7 @@
 import tensorflow as tf
 from flask import Flask, request, jsonify
 import joblib
+import os  # ✅ Needed to get the PORT environment variable for Render
 
 app = Flask(__name__)
 
@@ -20,6 +21,7 @@ EXPECTED_KEYS = [
 def home():
     return jsonify({"message": "Price Predictor API is up and running 🚀"})
 
+# ✅ Prediction route
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
@@ -30,7 +32,7 @@ def predict():
             if key not in data:
                 return jsonify({"error": f"Missing key: {key}"}), 400
 
-        # ✅ Prepare model input — pass strings and floats directly
+        # ✅ Prepare model input
         model_input = {
             "Produce Name": tf.convert_to_tensor([data["Produce Name"]], dtype=tf.string),
             "Location": tf.convert_to_tensor([data["Location"]], dtype=tf.string),
@@ -53,5 +55,7 @@ def predict():
     except Exception as e:
         return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
 
+# ✅ Tell Flask to listen on the port Render provides
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
